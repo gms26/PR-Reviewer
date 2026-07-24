@@ -1,0 +1,35 @@
+-- =============================================================
+-- V4 — Add webhook_id to repositories
+-- PR Reviewer Application
+-- =============================================================
+--
+-- Design rationale:
+--   Milestone 4 introduces GitHub webhook registration. When a
+--   webhook is created via POST /repos/{owner}/{repo}/hooks,
+--   GitHub returns a numeric webhook ID. We store it so we can:
+--     1. Detect existing webhooks (avoid duplicates on re-enable).
+--     2. Delete the specific webhook on disable (DELETE .../hooks/{id}).
+--
+-- Why nullable:
+--   A repository enters this table when the user selects it for
+--   tracking (Milestone 3). At that point no webhook exists yet.
+--   webhook_id is only populated after the user explicitly enables
+--   monitoring. NULL means "tracked but no webhook registered."
+--
+--   Valid states:
+--     webhook_enabled = false, webhook_id = NULL  → not monitoring
+--     webhook_enabled = true,  webhook_id = <id>  → actively monitoring
+--
+-- Type: BIGINT
+--   GitHub webhook IDs are positive integers. BIGINT gives ample
+--   headroom (GitHub IDs are well within 32-bit range today, but
+--   BIGINT matches our Java Long type and avoids future overflow).
+--
+-- No backfill required:
+--   All existing rows correctly default to NULL (not yet monitored).
+--   Unlike V2 (last_login_at) and V3 (full_name), there is no
+--   existing data to backfill. The column stays nullable permanently.
+-- =============================================================
+
+ALTER TABLE repositories
+    ADD COLUMN webhook_id BIGINT;

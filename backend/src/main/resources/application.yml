@@ -1,0 +1,130 @@
+spring:
+  application:
+    name: pr-reviewer
+
+  # -------------------------------------------------------
+  # Database (Neon PostgreSQL)
+  # -------------------------------------------------------
+  datasource:
+    url: ${DATABASE_URL}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 5
+      minimum-idle: 2
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+
+  # -------------------------------------------------------
+  # JPA / Hibernate
+  # -------------------------------------------------------
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+    open-in-view: false
+
+  # -------------------------------------------------------
+  # Flyway (Schema Migrations)
+  # -------------------------------------------------------
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+
+  # -------------------------------------------------------
+  # Spring Security — OAuth2 GitHub
+  # -------------------------------------------------------
+  security:
+    oauth2:
+      client:
+        registration:
+          github:
+            client-id: ${GITHUB_CLIENT_ID}
+            client-secret: ${GITHUB_CLIENT_SECRET}
+            scope: read:user, user:email, repo
+            redirect-uri: "{baseUrl}/login/oauth2/code/github"
+        provider:
+          github:
+            authorization-uri: https://github.com/login/oauth2/authorize
+            token-uri: https://github.com/login/oauth2/access_token
+            user-info-uri: https://api.github.com/user
+            user-name-attribute: login
+
+# -------------------------------------------------------
+# Application-Specific Configuration
+# -------------------------------------------------------
+app:
+  # The application's own public-facing base URL.
+  # Used by WebhookService to construct the GitHub webhook callback URL:
+  #   ${app.base-url}/webhook/github
+  #
+  # Local development: http://localhost:8080
+  # Production (Render): set BASE_URL env var to your deployed HTTPS URL,
+  #   e.g. https://pr-reviewer.onrender.com
+  #
+  # GitHub requires a publicly reachable HTTPS URL to deliver webhook payloads.
+  # For local testing, use a tunnel tool (e.g. ngrok) and set BASE_URL accordingly.
+  base-url: ${BASE_URL:http://localhost:8080}
+
+  github:
+    webhook-secret: ${GITHUB_WEBHOOK_SECRET}
+    api-base-url: https://api.github.com
+  gemini:
+    api-key: ${GEMINI_API_KEY}
+    api-url: https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent
+    max-retries: 3
+  frontend:
+    url: ${FRONTEND_URL:http://localhost:5173}
+
+# -------------------------------------------------------
+# Server
+# -------------------------------------------------------
+server:
+  port: ${PORT:8080}
+  error:
+    include-message: never
+    include-stacktrace: never
+    include-binding-errors: never
+
+# -------------------------------------------------------
+# Logging
+# -------------------------------------------------------
+logging:
+  level:
+    root: INFO
+    com.prreviewer: DEBUG
+    org.springframework.security: INFO
+    org.hibernate.SQL: WARN
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+
+# -------------------------------------------------------
+# Actuator
+# Only /actuator/health is exposed.
+# All other endpoints (env, beans, mappings, info, etc.)
+# are explicitly excluded — they can leak internal topology.
+# -------------------------------------------------------
+management:
+  server:
+    # Bind actuator to the same port as the app (Render only exposes one port)
+    port: ${PORT:8080}
+  endpoints:
+    web:
+      base-path: /actuator
+      exposure:
+        # Whitelist only — if a new endpoint is added to Spring, it will NOT
+        # be exposed unless explicitly listed here.
+        include: "health"
+        exclude: "*"
+  endpoint:
+    health:
+      # Never expose internal component details (DB, disk, etc.) in responses
+      show-details: never
+      show-components: never
