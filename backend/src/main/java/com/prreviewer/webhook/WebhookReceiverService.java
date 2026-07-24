@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.prreviewer.model.WebhookDelivery;
 import com.prreviewer.repository.WebhookDeliveryRepository;
 import com.prreviewer.service.PullRequestService;
-import com.prreviewer.github.GitHubPullRequestService;
 import com.prreviewer.model.PullRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,18 +49,18 @@ public class WebhookReceiverService {
     private final WebhookDeliveryRepository deliveryRepository;
     private final ObjectMapper              objectMapper;
     private final PullRequestService        pullRequestService;
-    private final GitHubPullRequestService  gitHubPullRequestService;
+    private final AsyncReviewCoordinatorService asyncReviewCoordinatorService;
 
     public WebhookReceiverService(WebhookSignatureVerifier signatureVerifier,
                                   WebhookDeliveryRepository deliveryRepository,
                                   ObjectMapper objectMapper,
                                   PullRequestService pullRequestService,
-                                  GitHubPullRequestService gitHubPullRequestService) {
+                                  AsyncReviewCoordinatorService asyncReviewCoordinatorService) {
         this.signatureVerifier        = signatureVerifier;
         this.deliveryRepository       = deliveryRepository;
         this.objectMapper             = objectMapper;
         this.pullRequestService       = pullRequestService;
-        this.gitHubPullRequestService = gitHubPullRequestService;
+        this.asyncReviewCoordinatorService = asyncReviewCoordinatorService;
     }
 
     /**
@@ -124,16 +123,8 @@ public class WebhookReceiverService {
         // A failure here does not roll back the WebhookDelivery row above.
         Optional<PullRequest> processedPr = pullRequestService.handlePullRequestEvent(root, event, action, deliveryId);
 
-        // 8. Fetch detailed data from GitHub (Milestone 7).
-        // Only run if the PR was successfully processed (not skipped as duplicate).
-        processedPr.ifPresent(pr -> {
-            log.debug("Initiating GitHub data fetch for PR id={} (repo={}/{})", 
-                      pr.getId(), pr.getRepository().getOwner(), pr.getRepository().getName());
-            gitHubPullRequestService.fetchAllPullRequestData(
-                    pr.getRepository().getUser(),
-                    pr.getRepository(),
-                    pr.getGithubPrNumber()
-            );
-        });
+        // 8. Execute the slow GitHub/Gemini pipeline asynchronously (Milestone 9).
+        // This ensures the current thread immediately returns HTTP 200 to GitHub.
+        processedPr.map(PullRequest::getId).ifPresent(asyncReviewCoordinatorService::executeBackgroundReview);
     }
 }

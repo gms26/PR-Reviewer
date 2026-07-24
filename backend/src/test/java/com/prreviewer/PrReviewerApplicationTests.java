@@ -13,11 +13,13 @@ import org.springframework.test.context.TestPropertySource;
  */
 @SpringBootTest
 @TestPropertySource(properties = {
-    "spring.datasource.url=jdbc:tc:postgresql:15:///pr_reviewer_test",
-    "spring.datasource.username=test",
-    "spring.datasource.password=test",
+    "spring.datasource.url=jdbc:h2:mem:pr_reviewer_test;DB_CLOSE_DELAY=-1",
+    "spring.datasource.username=sa",
+    "spring.datasource.password=sa",
+    "spring.datasource.driver-class-name=org.h2.Driver",
     "spring.flyway.enabled=false",
     "spring.jpa.hibernate.ddl-auto=create-drop",
+    "spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.H2Dialect",
     "spring.security.oauth2.client.registration.github.client-id=test-id",
     "spring.security.oauth2.client.registration.github.client-secret=test-secret",
     "app.github.webhook-secret=test-secret",

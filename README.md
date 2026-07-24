@@ -1,16 +1,30 @@
 # ⚡ PR Reviewer — AI-Powered GitHub Code Review
 
+![Java 21](https://img.shields.io/badge/Java-21-orange.svg)
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.3-brightgreen.svg)
+![React](https://img.shields.io/badge/React-18-blue.svg)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Neon-blue.svg)
+![Gemini AI](https://img.shields.io/badge/Gemini%20AI-Google-blueviolet.svg)
+![GitHub API](https://img.shields.io/badge/GitHub%20API-REST-black.svg)
+![License](https://img.shields.io/badge/License-MIT-green.svg)
+
 An automated code review system that analyzes GitHub Pull Requests using Google Gemini and posts inline comments directly on the PR.
 
 ---
 
 ## 🚀 How It Works
 
+**What problem does this solve?**
+Code reviews take time and context. PR Reviewer automatically acts as a first-pass reviewer, instantly analyzing changed code, detecting bugs, and leaving actionable inline comments before a human ever has to look at it.
+
 ```
 Developer opens PR → GitHub Webhook → Verify Signature
   → Fetch PR + Diff → Build Context → Call Gemini AI
   → Parse JSON → Store Review → Post Inline Comments to GitHub PR
 ```
+
+## 🎥 Demo
+*(Add a 2-3 minute demo GIF/Video showing OAuth Login, Repo Selection, Webhook Receipt, and GitHub Comments here)*
 
 ---
 
@@ -56,6 +70,14 @@ pr-reviewer/
 │   └── vite.config.js
 └── .env.example
 ```
+
+## 📄 Documentation
+
+For a deep dive into the system, see the following files:
+- [Architecture Overview](ARCHITECTURE.md)
+- [API Reference](API.md)
+- [Phase 1 Completion Criteria](PHASE1_CRITERIA.md)
+- [Future Enhancements Roadmap](FUTURE_ENHANCEMENTS.md)
 
 ---
 
@@ -180,15 +202,12 @@ Expected:
 | # | Milestone                          | Status      |
 |---|------------------------------------|-------------|
 | 1 | Project Initialization              | ✅ Complete |
-| 2 | GitHub OAuth Login                  | ⏳ Next     |
-| 3 | Repository Listing                  | ⏳          |
-| 4 | Webhook Receiver                    | ⏳          |
-| 5 | Webhook Signature Verification      | ⏳          |
-| 6 | PR Fetching                         | ⏳          |
-| 7 | Context Builder                     | ⏳          |
-| 8 | Gemini Integration                  | ⏳          |
-| 9 | Response Validation                 | ⏳          |
-| 10| GitHub Review Comments              | ⏳          |
-| 11| Persistence                         | ⏳          |
-| 12| Frontend (Login/Dashboard/Repos/Reviews/Settings) | ⏳ |
-| 13| Deployment                          | ⏳          |
+| 2 | GitHub OAuth Login                  | ✅ Complete |
+| 3 | Repository Listing                  | ✅ Complete |
+| 4 | Webhook Receiver                    | ✅ Complete |
+| 5 | Webhook Signature Verification      | ✅ Complete |
+| 6 | PR Fetching                         | ✅ Complete |
+| 7 | Context Builder                     | ✅ Complete |
+| 8 | Gemini Integration                  | ✅ Complete |
+| 9 | Response Validation                 | ✅ Complete |
+| 10| GitHub Review Comments              | ✅ Complete |

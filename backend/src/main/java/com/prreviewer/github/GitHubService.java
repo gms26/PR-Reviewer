@@ -2,6 +2,7 @@ package com.prreviewer.github;
 
 import com.prreviewer.exception.GitHubApiException;
 import com.prreviewer.exception.GitHubRateLimitException;
+import com.prreviewer.exception.GitHubValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -446,6 +447,43 @@ public class GitHubService {
         } catch (RestClientException ex) {
             throw new GitHubApiException(
                     "Network error fetching PR diff for " + owner + "/" + repo + " #" + prNumber, ex);
+        }
+    }
+
+    /**
+     * Posts a batch review to a specific Pull Request.
+     *
+     * @param accessToken the user's GitHub OAuth access token
+     * @param owner       the repository owner login
+     * @param repo        the repository name
+     * @param prNumber    the PR number
+     * @param request     the structured batch review request payload
+     * @throws GitHubRateLimitException if GitHub's rate limit is hit
+     * @throws GitHubApiException       for any other GitHub API error (e.g. 422 if lines are invalid)
+     */
+    public void postPullRequestReview(String accessToken, String owner, String repo, int prNumber, GitHubReviewRequestDto request) {
+        log.debug("Posting PR review for {}/{} #{}", owner, repo, prNumber);
+        long start = System.currentTimeMillis();
+
+        try {
+            githubRestClient.post()
+                    .uri("/repos/{owner}/{repo}/pulls/{pullNumber}/reviews", owner, repo, prNumber)
+                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
+                    .body(request)
+                    .retrieve()
+                    .toBodilessEntity();
+
+            log.debug("Posted PR review for {}/{} #{} in {}ms",
+                    owner, repo, prNumber, System.currentTimeMillis() - start);
+
+        } catch (HttpClientErrorException ex) {
+            if (ex.getStatusCode() == HttpStatus.UNPROCESSABLE_ENTITY) {
+                throw new GitHubValidationException("GitHub rejected the batch review payload (422) for " + owner + "/" + repo + " #" + prNumber, ex);
+            }
+            throw mapHttpError(ex, "postPullRequestReview", owner, repo, null);
+        } catch (RestClientException ex) {
+            throw new GitHubApiException(
+                    "Network error posting PR review for " + owner + "/" + repo + " #" + prNumber, ex);
         }
     }
 
