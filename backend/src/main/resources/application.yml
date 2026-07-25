@@ -122,7 +122,6 @@ management:
         # Whitelist only — if a new endpoint is added to Spring, it will NOT
         # be exposed unless explicitly listed here.
         include: "health"
-        exclude: "*"
   endpoint:
     health:
       # Never expose internal component details (DB, disk, etc.) in responses
