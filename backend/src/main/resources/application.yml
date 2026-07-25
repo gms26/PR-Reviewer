@@ -112,9 +112,6 @@ logging:
 # are explicitly excluded — they can leak internal topology.
 # -------------------------------------------------------
 management:
-  server:
-    # Bind actuator to the same port as the app (Render only exposes one port)
-    port: ${PORT:8080}
   endpoints:
     web:
       base-path: /actuator

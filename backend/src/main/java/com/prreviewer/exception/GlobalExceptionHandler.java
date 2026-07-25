@@ -116,6 +116,15 @@ public class GlobalExceptionHandler {
     }
 
     // ----------------------------------------------------------------
+    // Framework exceptions
+    // ----------------------------------------------------------------
+
+    @ExceptionHandler(org.springframework.web.servlet.resource.NoResourceFoundException.class)
+    public ResponseEntity<ProblemDetail> handleNoResource(org.springframework.web.servlet.resource.NoResourceFoundException ex) {
+        return buildProblem(HttpStatus.NOT_FOUND, "Not Found", "Resource not found");
+    }
+
+    // ----------------------------------------------------------------
     // Catch-all
     // ----------------------------------------------------------------
 
