@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
  * <p><strong>Security:</strong> Never include stack traces, internal messages,
  * or sensitive fields in the response body.
  */
-@RestControllerAdvice
+@RestControllerAdvice(basePackages = "com.prreviewer")
 public class GlobalExceptionHandler {
 
     private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
