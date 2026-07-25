@@ -121,6 +121,12 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ProblemDetail> handleAll(Exception ex) {
+        if (ex instanceof org.springframework.web.ErrorResponse errorResponse) {
+            // Let Spring's native web exceptions (404, 405, etc.) propagate 
+            // with their correct HTTP status and default ProblemDetail
+            return ResponseEntity.status(errorResponse.getStatusCode()).body(errorResponse.getBody());
+        }
+
         log.error("Unhandled exception: {}", ex.getMessage(), ex);
         return buildProblem(HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error",
                 "An unexpected error occurred. Please try again later.");
