@@ -88,11 +88,7 @@
             <artifactId>jackson-databind</artifactId>
         </dependency>
 
-        <!-- Spring Retry (for transient failure retries) -->
-        <dependency>
-            <groupId>org.springframework.retry</groupId>
-            <artifactId>spring-retry</artifactId>
-        </dependency>
+
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-aspects</artifactId>
