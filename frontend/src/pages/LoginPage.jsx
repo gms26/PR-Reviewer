@@ -8,7 +8,11 @@
 export default function LoginPage() {
   const handleGitHubLogin = () => {
     // Redirect to backend OAuth2 initiation endpoint
-    window.location.href = '/oauth2/authorization/github'
+    const backend =
+      import.meta.env.MODE === "development"
+        ? ""
+        : import.meta.env.VITE_API_BASE_URL;
+    window.location.href = `${backend}/oauth2/authorization/github`;
   }
 
   return (
