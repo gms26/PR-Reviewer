@@ -13,7 +13,13 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     api.get('/auth/me')
-      .then(res => setUser(res.data))
+      .then(res => {
+        if (res.status === 204 || !res.data) {
+          setUser(null)
+        } else {
+          setUser(res.data)
+        }
+      })
       .catch(() => setUser(null))
       .finally(() => setLoading(false))
   }, [])

@@ -59,6 +59,10 @@ public class AuthController {
      */
     @GetMapping("/me")
     public ResponseEntity<UserResponse> me(@AuthenticationPrincipal OAuth2User principal) {
+        if (principal == null) {
+            return ResponseEntity.noContent().build();
+        }
+
         Object rawId    = principal.getAttribute("id");
         String githubId = rawId != null ? String.valueOf(rawId) : null;
 

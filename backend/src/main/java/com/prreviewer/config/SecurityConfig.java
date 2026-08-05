@@ -64,7 +64,8 @@ public class SecurityConfig {
                     "/login/oauth2/**",
                     "/oauth2/**",
                     "/auth/success",
-                    "/auth/failure"
+                    "/auth/failure",
+                    "/auth/me"
                 ).permitAll()
                 // Everything else — authenticated session required.
                 .anyRequest().authenticated()
