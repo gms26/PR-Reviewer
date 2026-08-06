@@ -79,7 +79,13 @@ public class SecurityConfig {
             .exceptionHandling(ex -> ex
                 // Return 401 for unauthenticated API calls instead of redirecting to login page.
                 // The React SPA listens for 401 in its Axios interceptor and redirects to /login.
-                .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
+                .authenticationEntryPoint((request, response, authException) -> {
+                    if (request.getRequestURI().equals("/auth/me")) {
+                        response.setStatus(HttpStatus.NO_CONTENT.value());
+                    } else {
+                        response.sendError(HttpStatus.UNAUTHORIZED.value(), HttpStatus.UNAUTHORIZED.getReasonPhrase());
+                    }
+                })
             )
             .logout(logout -> logout
                 .logoutUrl("/auth/logout")
