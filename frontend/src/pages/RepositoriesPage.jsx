@@ -320,7 +320,7 @@ export default function RepositoriesPage() {
       {!loading && !error && repos.length > 0 && filtered.length === 0 && (
         <div className="glass-card text-center py-12">
           <div className="text-4xl mb-3">🔍</div>
-          <p className="text-white font-medium mb-1">No repositories match "{search}"</p>
+          <p className="text-white font-medium mb-1">No repositories match &quot;{search}&quot;</p>
           <p className="text-gray-500 text-sm">Try a different search term.</p>
         </div>
       )}

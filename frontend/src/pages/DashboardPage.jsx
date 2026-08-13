@@ -18,7 +18,7 @@ export default function DashboardPage() {
           {greeting},{' '}
           <span className="gradient-text">@{user?.username}</span> 👋
         </h1>
-        <p className="text-gray-400">Here's an overview of your AI-powered code reviews.</p>
+        <p className="text-gray-400">Here&apos;s an overview of your AI-powered code reviews.</p>
       </div>
 
       {/* Stats grid — placeholder data for Milestone 1 */}

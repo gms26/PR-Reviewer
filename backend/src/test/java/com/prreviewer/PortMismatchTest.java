@@ -6,8 +6,8 @@ import org.springframework.test.context.TestPropertySource;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @TestPropertySource(properties = {
-    "server.port=8080",
-    "management.server.port=8081",
+    "server.port=8180",
+    "management.server.port=8181",
     "spring.datasource.url=jdbc:h2:mem:testdb;MODE=PostgreSQL",
     "spring.datasource.driver-class-name=org.h2.Driver",
     "spring.jpa.database-platform=org.hibernate.dialect.H2Dialect",
