@@ -8,34 +8,49 @@ export default {
     extend: {
       colors: {
         brand: {
-          50:  '#f0f4ff',
-          100: '#e0e9ff',
-          200: '#c7d7fe',
-          300: '#a5bbfc',
-          400: '#7c96f8',
-          500: '#5b6ef3', // Indigo/Blue primary
-          600: '#4550e7',
-          700: '#3840cc',
-          800: '#2e35a5',
-          900: '#2b3183',
+          50:  '#f5f3ff',
+          100: '#ede9fe',
+          200: '#ddd6fe',
+          300: '#c4b5fd',
+          400: '#a78bfa',
+          500: '#8b5cf6', // Neon Violet
+          600: '#7c3aed',
+          700: '#6d28d9',
+          800: '#5b21b6',
+          900: '#4c1d95',
         },
-        accent: {
-          400: '#22d3ee', // Cyan
-          500: '#06b6d4',
-          600: '#0891b2',
+        acid: {
+          400: '#4ade80',
+          500: '#22c55e', // Acid Green
+          600: '#16a34a',
+        },
+        burnt: {
+          400: '#fb923c',
+          500: '#f97316', // Burnt Orange
+          600: '#ea580c',
+        },
+        charcoal: {
+          900: '#111113', // Deep Matte Background
+          800: '#1a1a1d',
+          700: '#27272a',
         }
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
+        sans: ['Outfit', 'system-ui', 'sans-serif'],
+        display: ['Space Grotesk', 'system-ui', 'sans-serif'],
         mono: ['JetBrains Mono', 'monospace'],
+      },
+      boxShadow: {
+        'solid': '4px 4px 0px 0px rgba(0, 0, 0, 1)',
+        'solid-sm': '2px 2px 0px 0px rgba(0, 0, 0, 1)',
+        'solid-brand': '4px 4px 0px 0px #8b5cf6',
+        'solid-acid': '4px 4px 0px 0px #22c55e',
       },
       animation: {
         'fade-in':      'fadeIn 0.6s ease-out forwards',
         'slide-up':     'slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards',
         'pulse-slow':   'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
         'float':        'float 6s ease-in-out infinite',
-        'gradient-x':   'gradient-x 15s ease infinite',
-        'glow':         'glow 2s ease-in-out infinite alternate',
       },
       keyframes: {
         fadeIn: {
@@ -50,20 +65,6 @@ export default {
           '0%, 100%': { transform: 'translateY(0)' },
           '50%': { transform: 'translateY(-10px)' },
         },
-        'gradient-x': {
-          '0%, 100%': {
-            'background-size': '200% 200%',
-            'background-position': 'left center'
-          },
-          '50%': {
-            'background-size': '200% 200%',
-            'background-position': 'right center'
-          },
-        },
-        glow: {
-          '0%': { 'box-shadow': '0 0 10px rgba(91, 110, 243, 0.2)' },
-          '100%': { 'box-shadow': '0 0 25px rgba(91, 110, 243, 0.6)' },
-        }
       },
     },
   },

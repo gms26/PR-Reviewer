@@ -72,11 +72,12 @@ function RepoCard({ repo, onSelected }) {
   }
 
   return (
-    <div className={`glass-card relative overflow-hidden flex flex-col gap-3 group transition-all duration-300 animate-slide-up ${
-      repo.webhookEnabled ? 'ring-2 ring-brand-500/50 shadow-[0_0_20px_rgba(91,110,243,0.15)]' : ''
+    <div className={`bento-card flex flex-col gap-3 group animate-slide-up ${
+      repo.webhookEnabled ? 'border-brand-500 shadow-solid-brand' : ''
     }`}>
+      <div className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity bg-[radial-gradient(var(--brand)_1px,transparent_1px)] [background-size:16px_16px] pointer-events-none"></div>
       {repo.webhookEnabled && (
-        <div className="absolute top-0 right-0 w-32 h-32 bg-brand-500/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500"></div>
+        <div className="absolute top-0 right-0 w-16 h-16 bg-brand-500 rounded-bl-full opacity-10 group-hover:scale-150 transition-transform duration-500 pointer-events-none"></div>
       )}
 
       {/* Header row */}
@@ -176,12 +177,12 @@ function RepoCard({ repo, onSelected }) {
 
 function RepoCardSkeleton() {
   return (
-    <div className="glass-card flex flex-col gap-3 relative overflow-hidden">
+    <div className="bento-card flex flex-col gap-3 relative overflow-hidden h-40">
       <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent animate-shimmer" style={{ backgroundSize: '200% 100%' }}></div>
-      <div className="h-5 bg-white/10 rounded w-2/3 animate-pulse" />
-      <div className="h-4 bg-white/5 rounded w-full mt-2 animate-pulse" />
-      <div className="h-4 bg-white/5 rounded w-3/4 animate-pulse" />
-      <div className="h-10 bg-white/10 rounded-lg mt-auto animate-pulse" />
+      <div className="h-5 bg-charcoal-700 rounded w-2/3 animate-pulse" />
+      <div className="h-4 bg-charcoal-800 rounded w-full mt-2 animate-pulse" />
+      <div className="h-4 bg-charcoal-800 rounded w-3/4 animate-pulse" />
+      <div className="h-10 bg-charcoal-700 rounded-lg mt-auto animate-pulse" />
     </div>
   )
 }
@@ -247,7 +248,7 @@ export default function RepositoriesPage() {
     <AppShell>
       {/* Page header */}
       <div className="mb-8 animate-slide-up">
-        <h1 className="text-4xl font-bold text-white mb-2 tracking-tight">Repositories</h1>
+        <h1 className="text-5xl font-display font-bold text-white mb-2 tracking-tighter uppercase">Repositories</h1>
         <p className="text-gray-400 text-lg">
           Select repositories to enable AI-powered PR review.
           {!loading && repos.length > 0 && (
@@ -260,7 +261,7 @@ export default function RepositoriesPage() {
 
       {/* Error state */}
       {error && !loading && (
-        <div className="glass-card mb-6 flex items-start gap-4 border-red-500/20 bg-red-500/5">
+        <div className="bento-card mb-6 flex items-start gap-4 border-red-500 bg-red-500/10 shadow-solid-sm shadow-red-500">
           <span className="text-2xl flex-shrink-0">⚠️</span>
           <div className="flex-1">
             <p className="text-red-400 font-medium mb-1">Error loading repositories</p>
@@ -284,8 +285,8 @@ export default function RepositoriesPage() {
               type="text"
               value={search}
               onChange={e => setSearch(e.target.value)}
-              placeholder="Search repositories…"
-              className="w-full glass rounded-xl pl-12 pr-12 py-4 text-base text-white placeholder-gray-500 outline-none focus:ring-2 focus:ring-brand-500/50 focus:border-brand-500/50 transition-all shadow-lg"
+              placeholder="SEARCH REPOSITORIES…"
+              className="w-full bg-charcoal-800 border-2 border-charcoal-700 rounded-lg pl-12 pr-12 py-4 text-base font-display font-bold tracking-wider text-white placeholder-gray-500 outline-none focus:ring-0 focus:border-brand-500 focus:shadow-solid-brand transition-all"
             />
             {search && (
               <button
@@ -322,7 +323,7 @@ export default function RepositoriesPage() {
 
       {/* No search results */}
       {!loading && !error && repos.length > 0 && filtered.length === 0 && (
-        <div className="glass-card text-center py-12">
+        <div className="bento-card text-center py-12">
           <div className="text-4xl mb-3">🔍</div>
           <p className="text-white font-medium mb-1">No repositories match &quot;{search}&quot;</p>
           <p className="text-gray-500 text-sm">Try a different search term.</p>
@@ -331,8 +332,8 @@ export default function RepositoriesPage() {
 
       {/* Empty state — no repos at all */}
       {!loading && !error && repos.length === 0 && (
-        <div className="glass-card text-center py-16">
-          <div className="text-5xl mb-4">◫</div>
+        <div className="bento-card text-center py-16">
+          <div className="text-6xl mb-4 font-display font-bold tracking-tighter text-charcoal-700">◫</div>
           <p className="text-white font-semibold mb-2">No repositories found</p>
           <p className="text-gray-400 text-sm mb-6">
             Make sure your GitHub account has repositories accessible with the{' '}
