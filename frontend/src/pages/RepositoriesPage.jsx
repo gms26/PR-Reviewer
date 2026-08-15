@@ -72,20 +72,23 @@ function RepoCard({ repo, onSelected }) {
   }
 
   return (
-    <div className={`glass-card flex flex-col gap-3 transition-all duration-300 ${
-      repo.webhookEnabled ? 'ring-1 ring-brand-500/40' : ''
+    <div className={`glass-card relative overflow-hidden flex flex-col gap-3 group transition-all duration-300 animate-slide-up ${
+      repo.webhookEnabled ? 'ring-2 ring-brand-500/50 shadow-[0_0_20px_rgba(91,110,243,0.15)]' : ''
     }`}>
+      {repo.webhookEnabled && (
+        <div className="absolute top-0 right-0 w-32 h-32 bg-brand-500/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500"></div>
+      )}
 
       {/* Header row */}
-      <div className="flex items-start justify-between gap-3">
+      <div className="flex items-start justify-between gap-3 relative z-10">
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="font-semibold text-white text-sm truncate">{repo.fullName}</span>
+            <span className="font-semibold text-white text-base truncate group-hover:text-brand-300 transition-colors">{repo.fullName}</span>
             <span className={`badge ${repo.privateRepo ? 'badge-warning' : 'badge-info'}`}>
               {repo.privateRepo ? '🔒 Private' : '🌐 Public'}
             </span>
             {repo.webhookEnabled && (
-              <span className="badge badge-success">✓ Monitoring</span>
+              <span className="badge badge-success animate-pulse-slow">✓ Monitoring</span>
             )}
           </div>
         </div>
@@ -96,7 +99,7 @@ function RepoCard({ repo, onSelected }) {
             href={repo.htmlUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-gray-500 hover:text-gray-300 transition-colors flex-shrink-0"
+            className="text-gray-500 hover:text-white bg-white/5 hover:bg-white/10 p-2 rounded-lg transition-all flex-shrink-0"
             title="View on GitHub"
             aria-label={`View ${repo.fullName} on GitHub`}
           >
@@ -109,28 +112,28 @@ function RepoCard({ repo, onSelected }) {
 
       {/* Description */}
       {repo.description && (
-        <p className="text-gray-400 text-xs leading-relaxed line-clamp-2">{repo.description}</p>
+        <p className="text-gray-400 text-sm leading-relaxed line-clamp-2 relative z-10">{repo.description}</p>
       )}
 
       {/* Error */}
       {error && (
-        <p className="text-xs text-red-400 bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2">
+        <p className="text-xs text-red-400 bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2 relative z-10">
           {error}
         </p>
       )}
 
       {/* Action buttons */}
-      <div className="mt-auto pt-2">
+      <div className="mt-auto pt-4 relative z-10">
         {!repo.selected ? (
           <button
             id={`btn-repo-track-${repo.githubRepoId}`}
             onClick={handleTrack}
             disabled={loading}
-            className="btn-secondary py-2 text-xs w-full disabled:opacity-60 disabled:cursor-not-allowed"
+            className="btn-secondary py-2.5 text-xs w-full disabled:opacity-60 disabled:cursor-not-allowed group-hover:bg-white/10"
           >
             {loading ? (
               <span className="flex items-center justify-center gap-2">
-                <span className="w-3 h-3 border border-white/40 border-t-white rounded-full animate-spin" />
+                <span className="w-3 h-3 border-2 border-brand-400/40 border-t-brand-400 rounded-full animate-spin" />
                 Tracking…
               </span>
             ) : 'Track Repository'}
@@ -140,11 +143,11 @@ function RepoCard({ repo, onSelected }) {
             id={`btn-repo-disable-${repo.id}`}
             onClick={handleDisable}
             disabled={loading}
-            className="btn-danger py-2 text-xs w-full disabled:opacity-60 disabled:cursor-not-allowed"
+            className="btn-danger py-2.5 text-xs w-full disabled:opacity-60 disabled:cursor-not-allowed"
           >
             {loading ? (
               <span className="flex items-center justify-center gap-2">
-                <span className="w-3 h-3 border border-white/40 border-t-white rounded-full animate-spin" />
+                <span className="w-3 h-3 border-2 border-red-400/40 border-t-red-400 rounded-full animate-spin" />
                 Disabling…
               </span>
             ) : 'Disable Monitoring'}
@@ -154,11 +157,11 @@ function RepoCard({ repo, onSelected }) {
             id={`btn-repo-enable-${repo.id}`}
             onClick={handleEnable}
             disabled={loading}
-            className="btn-primary py-2 text-xs w-full disabled:opacity-60 disabled:cursor-not-allowed"
+            className="btn-primary py-2.5 text-xs w-full disabled:opacity-60 disabled:cursor-not-allowed"
           >
             {loading ? (
               <span className="flex items-center justify-center gap-2">
-                <span className="w-3 h-3 border border-white/40 border-t-white rounded-full animate-spin" />
+                <span className="w-3 h-3 border-2 border-white/40 border-t-white rounded-full animate-spin" />
                 Enabling…
               </span>
             ) : 'Enable Monitoring'}
@@ -173,11 +176,12 @@ function RepoCard({ repo, onSelected }) {
 
 function RepoCardSkeleton() {
   return (
-    <div className="glass-card animate-pulse flex flex-col gap-3">
-      <div className="h-4 bg-white/10 rounded w-2/3" />
-      <div className="h-3 bg-white/5 rounded w-full" />
-      <div className="h-3 bg-white/5 rounded w-3/4" />
-      <div className="h-8 bg-white/10 rounded-xl mt-auto" />
+    <div className="glass-card flex flex-col gap-3 relative overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent animate-shimmer" style={{ backgroundSize: '200% 100%' }}></div>
+      <div className="h-5 bg-white/10 rounded w-2/3 animate-pulse" />
+      <div className="h-4 bg-white/5 rounded w-full mt-2 animate-pulse" />
+      <div className="h-4 bg-white/5 rounded w-3/4 animate-pulse" />
+      <div className="h-10 bg-white/10 rounded-lg mt-auto animate-pulse" />
     </div>
   )
 }
@@ -242,12 +246,12 @@ export default function RepositoriesPage() {
   return (
     <AppShell>
       {/* Page header */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-white mb-1">Repositories</h1>
-        <p className="text-gray-400">
+      <div className="mb-8 animate-slide-up">
+        <h1 className="text-4xl font-bold text-white mb-2 tracking-tight">Repositories</h1>
+        <p className="text-gray-400 text-lg">
           Select repositories to enable AI-powered PR review.
           {!loading && repos.length > 0 && (
-            <span className="ml-2 text-gray-500 text-sm">
+            <span className="ml-3 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-brand-500/20 text-brand-300 border border-brand-500/30 shadow-[0_0_10px_rgba(91,110,243,0.2)]">
               {monitoredCount} of {repos.length} monitored
             </span>
           )}
@@ -270,26 +274,26 @@ export default function RepositoriesPage() {
 
       {/* Search bar */}
       {!error && (
-        <div className="mb-6">
-          <div className="relative">
-            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 text-sm pointer-events-none">
-              🔍
+        <div className="mb-8 animate-slide-up" style={{ animationDelay: '100ms' }}>
+          <div className="relative group">
+            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-brand-400 transition-colors pointer-events-none">
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
             </span>
             <input
               id="input-repo-search"
               type="text"
               value={search}
               onChange={e => setSearch(e.target.value)}
-              placeholder="Filter repositories…"
-              className="w-full glass rounded-xl pl-10 pr-4 py-3 text-sm text-white placeholder-gray-500 outline-none focus:ring-1 focus:ring-brand-500/50 transition-all"
+              placeholder="Search repositories…"
+              className="w-full glass rounded-xl pl-12 pr-12 py-4 text-base text-white placeholder-gray-500 outline-none focus:ring-2 focus:ring-brand-500/50 focus:border-brand-500/50 transition-all shadow-lg"
             />
             {search && (
               <button
                 onClick={() => setSearch('')}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-300 text-lg leading-none"
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white bg-white/5 hover:bg-white/10 p-1.5 rounded-md transition-all"
                 aria-label="Clear search"
               >
-                ×
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
               </button>
             )}
           </div>
