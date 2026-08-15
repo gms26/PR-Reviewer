@@ -66,7 +66,7 @@ public class AsyncReviewCoordinatorService {
         PullRequest pr = null;
 
         try {
-            pr = pullRequestRepository.findById(pullRequestId)
+            pr = pullRequestRepository.findByIdWithRepositoryAndUser(pullRequestId)
                     .orElseThrow(() -> new IllegalArgumentException("PullRequest not found for id: " + pullRequestId));
 
             log.info("Starting background review pipeline for PR id={} (repo={}/{})",
