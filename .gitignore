@@ -22,6 +22,7 @@ target/
 # Frontend
 frontend/node_modules/
 frontend/dist/
+*.timestamp-*.mjs
 
 # Logs
 *.log
@@ -30,3 +31,8 @@ logs/
 # OS
 .DS_Store
 Thumbs.db
+
+# Test Repository / Temp
+test_repo/
+tmp/
+temp/

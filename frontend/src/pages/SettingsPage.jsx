@@ -7,13 +7,13 @@ import AppShell from '../components/AppShell.jsx'
 export default function SettingsPage() {
   return (
     <AppShell>
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-white mb-1">Settings</h1>
-        <p className="text-gray-400">Configure your PR Reviewer preferences.</p>
+      <div className="mb-8 pb-6 border-b border-subtle">
+        <h1 className="text-5xl font-display font-bold text-ink-900 mb-2 tracking-tight">Settings</h1>
+        <p className="text-ink-600 text-lg">Configure your PR Reviewer preferences.</p>
       </div>
-      <div className="glass-card text-center py-16">
-        <div className="text-4xl mb-4">◎</div>
-        <p className="text-gray-400">Settings coming in Milestone 12d.</p>
+      <div className="glass-card text-center py-16 bg-white">
+        <div className="text-4xl mb-4 text-ink-300">◎</div>
+        <p className="text-ink-600 text-lg font-display">Settings coming in Milestone 12d.</p>
       </div>
     </AppShell>
   )

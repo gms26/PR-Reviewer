@@ -72,24 +72,19 @@ function RepoCard({ repo, onSelected }) {
   }
 
   return (
-    <div className={`bento-card flex flex-col gap-3 group animate-slide-up ${
-      repo.webhookEnabled ? 'border-brand-500 shadow-solid-brand' : ''
+    <div className={`glass-card flex flex-col gap-3 group animate-slide-up bg-white ${
+      repo.webhookEnabled ? 'border-brand-500 shadow-card-hover' : ''
     }`}>
-      <div className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity bg-[radial-gradient(var(--brand)_1px,transparent_1px)] [background-size:16px_16px] pointer-events-none"></div>
-      {repo.webhookEnabled && (
-        <div className="absolute top-0 right-0 w-16 h-16 bg-brand-500 rounded-bl-full opacity-10 group-hover:scale-150 transition-transform duration-500 pointer-events-none"></div>
-      )}
-
       {/* Header row */}
       <div className="flex items-start justify-between gap-3 relative z-10">
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="font-semibold text-white text-base truncate group-hover:text-brand-300 transition-colors">{repo.fullName}</span>
+            <span className="font-display font-bold text-ink-900 text-lg truncate group-hover:text-brand-600 transition-colors">{repo.fullName}</span>
             <span className={`badge ${repo.privateRepo ? 'badge-warning' : 'badge-info'}`}>
               {repo.privateRepo ? '🔒 Private' : '🌐 Public'}
             </span>
             {repo.webhookEnabled && (
-              <span className="badge badge-success animate-pulse-slow">✓ Monitoring</span>
+              <span className="badge badge-success">✓ Monitoring</span>
             )}
           </div>
         </div>
@@ -100,7 +95,7 @@ function RepoCard({ repo, onSelected }) {
             href={repo.htmlUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-gray-500 hover:text-white bg-white/5 hover:bg-white/10 p-2 rounded-lg transition-all flex-shrink-0"
+            className="text-ink-500 hover:text-ink-900 bg-paper-800 hover:bg-paper-700 p-2 rounded-sm transition-all flex-shrink-0 border border-transparent hover:border-subtle"
             title="View on GitHub"
             aria-label={`View ${repo.fullName} on GitHub`}
           >
@@ -113,12 +108,12 @@ function RepoCard({ repo, onSelected }) {
 
       {/* Description */}
       {repo.description && (
-        <p className="text-gray-400 text-sm leading-relaxed line-clamp-2 relative z-10">{repo.description}</p>
+        <p className="text-ink-600 text-sm leading-relaxed line-clamp-2 relative z-10">{repo.description}</p>
       )}
 
       {/* Error */}
       {error && (
-        <p className="text-xs text-red-400 bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2 relative z-10">
+        <p className="text-xs text-terracotta-600 bg-terracotta-50 border border-terracotta-400 rounded-sm px-3 py-2 relative z-10">
           {error}
         </p>
       )}
@@ -130,7 +125,7 @@ function RepoCard({ repo, onSelected }) {
             id={`btn-repo-track-${repo.githubRepoId}`}
             onClick={handleTrack}
             disabled={loading}
-            className="btn-secondary py-2.5 text-xs w-full disabled:opacity-60 disabled:cursor-not-allowed group-hover:bg-white/10"
+            className="btn-secondary py-2 text-xs w-full disabled:opacity-60 disabled:cursor-not-allowed group-hover:bg-paper-800"
           >
             {loading ? (
               <span className="flex items-center justify-center gap-2">
@@ -144,11 +139,11 @@ function RepoCard({ repo, onSelected }) {
             id={`btn-repo-disable-${repo.id}`}
             onClick={handleDisable}
             disabled={loading}
-            className="btn-danger py-2.5 text-xs w-full disabled:opacity-60 disabled:cursor-not-allowed"
+            className="btn-danger py-2 text-xs w-full disabled:opacity-60 disabled:cursor-not-allowed"
           >
             {loading ? (
               <span className="flex items-center justify-center gap-2">
-                <span className="w-3 h-3 border-2 border-red-400/40 border-t-red-400 rounded-full animate-spin" />
+                <span className="w-3 h-3 border-2 border-terracotta-400/40 border-t-terracotta-400 rounded-full animate-spin" />
                 Disabling…
               </span>
             ) : 'Disable Monitoring'}
@@ -158,7 +153,7 @@ function RepoCard({ repo, onSelected }) {
             id={`btn-repo-enable-${repo.id}`}
             onClick={handleEnable}
             disabled={loading}
-            className="btn-primary py-2.5 text-xs w-full disabled:opacity-60 disabled:cursor-not-allowed"
+            className="btn-primary py-2 text-xs w-full disabled:opacity-60 disabled:cursor-not-allowed"
           >
             {loading ? (
               <span className="flex items-center justify-center gap-2">
@@ -177,12 +172,12 @@ function RepoCard({ repo, onSelected }) {
 
 function RepoCardSkeleton() {
   return (
-    <div className="bento-card flex flex-col gap-3 relative overflow-hidden h-40">
-      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent animate-shimmer" style={{ backgroundSize: '200% 100%' }}></div>
-      <div className="h-5 bg-charcoal-700 rounded w-2/3 animate-pulse" />
-      <div className="h-4 bg-charcoal-800 rounded w-full mt-2 animate-pulse" />
-      <div className="h-4 bg-charcoal-800 rounded w-3/4 animate-pulse" />
-      <div className="h-10 bg-charcoal-700 rounded-lg mt-auto animate-pulse" />
+    <div className="glass-card flex flex-col gap-3 relative overflow-hidden h-40 bg-white">
+      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-paper-800 to-transparent animate-shimmer" style={{ backgroundSize: '200% 100%' }}></div>
+      <div className="h-6 bg-paper-800 rounded-sm w-2/3 animate-pulse" />
+      <div className="h-4 bg-paper-800 rounded-sm w-full mt-2 animate-pulse" />
+      <div className="h-4 bg-paper-800 rounded-sm w-3/4 animate-pulse" />
+      <div className="h-10 bg-paper-800 rounded-sm mt-auto animate-pulse" />
     </div>
   )
 }
@@ -247,12 +242,12 @@ export default function RepositoriesPage() {
   return (
     <AppShell>
       {/* Page header */}
-      <div className="mb-8 animate-slide-up">
-        <h1 className="text-5xl font-display font-bold text-white mb-2 tracking-tighter uppercase">Repositories</h1>
-        <p className="text-gray-400 text-lg">
+      <div className="mb-8 animate-slide-up pb-6 border-b border-subtle">
+        <h1 className="text-5xl font-display font-bold text-ink-900 mb-2 tracking-tight">Repositories</h1>
+        <p className="text-ink-600 text-lg">
           Select repositories to enable AI-powered PR review.
           {!loading && repos.length > 0 && (
-            <span className="ml-3 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-brand-500/20 text-brand-300 border border-brand-500/30 shadow-[0_0_10px_rgba(91,110,243,0.2)]">
+            <span className="ml-3 inline-flex items-center px-2.5 py-0.5 rounded-sm text-xs font-medium bg-brand-50 text-brand-700 border border-brand-200">
               {monitoredCount} of {repos.length} monitored
             </span>
           )}
@@ -261,11 +256,11 @@ export default function RepositoriesPage() {
 
       {/* Error state */}
       {error && !loading && (
-        <div className="bento-card mb-6 flex items-start gap-4 border-red-500 bg-red-500/10 shadow-solid-sm shadow-red-500">
+        <div className="glass-card mb-6 flex items-start gap-4 border-terracotta-400 bg-terracotta-50">
           <span className="text-2xl flex-shrink-0">⚠️</span>
           <div className="flex-1">
-            <p className="text-red-400 font-medium mb-1">Error loading repositories</p>
-            <p className="text-gray-400 text-sm mb-3">{error}</p>
+            <p className="text-terracotta-600 font-bold mb-1">Error loading repositories</p>
+            <p className="text-terracotta-700 text-sm mb-3">{error}</p>
             <button id="btn-retry-repos" onClick={loadRepos} className="btn-secondary text-xs py-2 px-4">
               Try again
             </button>
@@ -277,7 +272,7 @@ export default function RepositoriesPage() {
       {!error && (
         <div className="mb-8 animate-slide-up" style={{ animationDelay: '100ms' }}>
           <div className="relative group">
-            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-brand-400 transition-colors pointer-events-none">
+            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-ink-500 group-focus-within:text-brand-600 transition-colors pointer-events-none">
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
             </span>
             <input
@@ -285,13 +280,13 @@ export default function RepositoriesPage() {
               type="text"
               value={search}
               onChange={e => setSearch(e.target.value)}
-              placeholder="SEARCH REPOSITORIES…"
-              className="w-full bg-charcoal-800 border-2 border-charcoal-700 rounded-lg pl-12 pr-12 py-4 text-base font-display font-bold tracking-wider text-white placeholder-gray-500 outline-none focus:ring-0 focus:border-brand-500 focus:shadow-solid-brand transition-all"
+              placeholder="Search repositories..."
+              className="w-full bg-white border border-subtle rounded-sm pl-12 pr-12 py-4 text-base font-display font-bold text-ink-900 placeholder-ink-400 outline-none focus:ring-0 focus:border-brand-500 focus:shadow-sm transition-all"
             />
             {search && (
               <button
                 onClick={() => setSearch('')}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white bg-white/5 hover:bg-white/10 p-1.5 rounded-md transition-all"
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-ink-500 hover:text-ink-900 bg-paper-800 hover:bg-paper-700 p-1.5 rounded-sm transition-all border border-transparent hover:border-subtle"
                 aria-label="Clear search"
               >
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
@@ -323,27 +318,27 @@ export default function RepositoriesPage() {
 
       {/* No search results */}
       {!loading && !error && repos.length > 0 && filtered.length === 0 && (
-        <div className="bento-card text-center py-12">
+        <div className="glass-card text-center py-12 bg-white">
           <div className="text-4xl mb-3">🔍</div>
-          <p className="text-white font-medium mb-1">No repositories match &quot;{search}&quot;</p>
-          <p className="text-gray-500 text-sm">Try a different search term.</p>
+          <p className="text-ink-900 font-bold mb-1">No repositories match &quot;{search}&quot;</p>
+          <p className="text-ink-600 text-sm">Try a different search term.</p>
         </div>
       )}
 
       {/* Empty state — no repos at all */}
       {!loading && !error && repos.length === 0 && (
-        <div className="bento-card text-center py-16">
-          <div className="text-6xl mb-4 font-display font-bold tracking-tighter text-charcoal-700">◫</div>
-          <p className="text-white font-semibold mb-2">No repositories found</p>
-          <p className="text-gray-400 text-sm mb-6">
+        <div className="glass-card text-center py-16 bg-white">
+          <div className="text-6xl mb-4 font-display font-bold tracking-tighter text-ink-300">◫</div>
+          <p className="text-ink-900 font-bold text-xl mb-2">No repositories found</p>
+          <p className="text-ink-600 text-sm mb-6">
             Make sure your GitHub account has repositories accessible with the{' '}
-            <code className="text-brand-400">repo</code> OAuth scope.
+            <code className="text-brand-600 font-bold px-1 py-0.5 bg-paper-800 border border-subtle rounded-sm">repo</code> OAuth scope.
           </p>
           <a
             href="https://github.com/new"
             target="_blank"
             rel="noopener noreferrer"
-            className="btn-primary text-sm"
+            className="btn-primary text-sm inline-flex"
           >
             Create a repository on GitHub
           </a>

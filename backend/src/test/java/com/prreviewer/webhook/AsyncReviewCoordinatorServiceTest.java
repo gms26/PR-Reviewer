@@ -73,7 +73,7 @@ class AsyncReviewCoordinatorServiceTest {
 
     @Test
     void testExecuteBackgroundReviewSuccessPath() {
-        when(pullRequestRepository.findById(100L)).thenReturn(Optional.of(pullRequest));
+        when(pullRequestRepository.findByIdWithRepositoryAndUser(100L)).thenReturn(Optional.of(pullRequest));
 
         PullRequestData prData = mock(PullRequestData.class);
         when(gitHubPullRequestService.fetchAllPullRequestData(any(), any(), eq(42))).thenReturn(prData);
@@ -98,7 +98,7 @@ class AsyncReviewCoordinatorServiceTest {
                 gitHubReviewCommentService
         );
 
-        inOrder.verify(pullRequestRepository).findById(100L);
+        inOrder.verify(pullRequestRepository).findByIdWithRepositoryAndUser(100L);
         inOrder.verify(gitHubPullRequestService).fetchAllPullRequestData(any(), eq(repository), eq(42));
         inOrder.verify(contextBuilder).build(prData);
         inOrder.verify(aiReviewService).performReview(context);
@@ -108,7 +108,7 @@ class AsyncReviewCoordinatorServiceTest {
 
     @Test
     void testExecuteBackgroundReviewHandlesExceptionsGracefully() {
-        when(pullRequestRepository.findById(100L)).thenReturn(Optional.of(pullRequest));
+        when(pullRequestRepository.findByIdWithRepositoryAndUser(100L)).thenReturn(Optional.of(pullRequest));
         when(gitHubPullRequestService.fetchAllPullRequestData(any(), any(), anyInt()))
                 .thenThrow(new RuntimeException("API failure"));
 

@@ -7,13 +7,13 @@ import AppShell from '../components/AppShell.jsx'
 export default function ReviewsPage() {
   return (
     <AppShell>
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-white mb-1">Reviews</h1>
-        <p className="text-gray-400">View AI-generated code reviews for your Pull Requests.</p>
+      <div className="mb-8 pb-6 border-b border-subtle">
+        <h1 className="text-5xl font-display font-bold text-ink-900 mb-2 tracking-tight">Reviews</h1>
+        <p className="text-ink-600 text-lg">View AI-generated code reviews for your Pull Requests.</p>
       </div>
-      <div className="glass-card text-center py-16">
-        <div className="text-4xl mb-4">◈</div>
-        <p className="text-gray-400">Review history coming in Milestone 12c.</p>
+      <div className="glass-card text-center py-16 bg-white">
+        <div className="text-4xl mb-4 text-ink-300">◈</div>
+        <p className="text-ink-600 text-lg font-display">Review history coming in Milestone 12c.</p>
       </div>
     </AppShell>
   )
