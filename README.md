@@ -41,10 +41,6 @@ flowchart LR
     Pipeline -- 9. Post Comments --> GH
 ```
 
-## 🎥 Demo
-*(Add a 2-3 minute demo GIF/Video showing OAuth Login, Repo Selection, Webhook Receipt, and GitHub Comments here)*
-
----
 
 ## 🛠 Tech Stack
 
