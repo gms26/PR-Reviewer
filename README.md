@@ -17,10 +17,51 @@ An automated code review system that analyzes GitHub Pull Requests using Google 
 **What problem does this solve?**
 Code reviews take time and context. PR Reviewer automatically acts as a first-pass reviewer, instantly analyzing changed code, detecting bugs, and leaving actionable inline comments before a human ever has to look at it.
 
-```
-Developer opens PR → GitHub Webhook → Verify Signature
-  → Fetch PR + Diff → Build Context → Call Gemini AI
-  → Parse JSON → Store Review → Post Inline Comments to GitHub PR
+```mermaid
+sequenceDiagram
+    autonumber
+    actor Dev as Developer
+    participant GH as GitHub
+    
+    box rgb(33,38,45) PR Reviewer System
+        participant Webhook as ⚡ WebhookReceiver
+        participant Async as 🔄 AsyncPipeline
+        participant DB as 🗄️ Database
+    end
+    
+    participant AI as 🧠 Gemini AI
+
+    Note over Dev,GH: 1. Initiation
+    Dev->>GH: Opens/Updates Pull Request
+    GH->>Webhook: Sends PR Event (Webhook)
+    
+    Note over Webhook,DB: 2. Synchronous Ingestion
+    activate Webhook
+    Webhook->>Webhook: Validate HMAC Signature
+    Webhook->>DB: Persist Delivery & PR Metadata
+    Webhook-->>GH: HTTP 200 OK (Acknowledge)
+    Webhook-)Async: Trigger Review Pipeline
+    deactivate Webhook
+    
+    Note over Async,AI: 3. Asynchronous Processing
+    activate Async
+    Async->>GH: Fetch PR Diffs (OAuth Token)
+    GH-->>Async: Changed Files & Diffs
+    
+    Async->>Async: Build Review Context
+    
+    Async->>AI: Send Prompt + Code Context
+    activate AI
+    AI-->>Async: Returns Review Findings (JSON)
+    deactivate AI
+    
+    Async->>Async: Validate & Map Comments
+    Async->>DB: Store Review Results
+    
+    Note over Async,GH: 4. Feedback Delivery
+    Async->>GH: Post Batch Inline Comments to PR
+    deactivate Async
+    GH-->>Dev: Notifies Developer
 ```
 
 ## 🎥 Demo
