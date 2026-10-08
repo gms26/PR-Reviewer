@@ -22,37 +22,23 @@ Code reviews take time and context. PR Reviewer automatically acts as a first-pa
 Here is a simplified, high-level overview of how the PR Reviewer system works from start to finish:
 
 ```mermaid
-flowchart TD
-    %% Styling
-    classDef dev fill:#f9f9f9,stroke:#333,stroke-width:2px;
-    classDef github fill:#24292e,stroke:#fff,stroke-width:2px,color:#fff;
-    classDef backend fill:#e3f2fd,stroke:#1e88e5,stroke-width:2px;
-    classDef ai fill:#fff3e0,stroke:#f57c00,stroke-width:2px;
-    classDef db fill:#f3e5f5,stroke:#8e24aa,stroke-width:2px;
+flowchart LR
+    Dev([👨‍💻 Developer])
+    GH([🐙 GitHub PR])
+    Webhook[⚡ Webhook]
+    DB[(🗄️ Database)]
+    Pipeline[🔄 Pipeline]
+    AI{🧠 Gemini AI}
 
-    %% Nodes
-    Dev(("👨‍💻 Developer")):::dev
-    GH_PR{"🐙 GitHub PR"}:::github
-    Webhook["⚡ Webhook Receiver\n(Fast & Sync)"]:::backend
-    Pipeline["🔄 Review Pipeline\n(Background Task)"]:::backend
-    DB[("🗄️ PostgreSQL\nDatabase")]:::db
-    Gemini["🧠 Gemini AI\n(Code Analysis)"]:::ai
-    GH_Comments{"💬 GitHub\nComments"}:::github
-
-    %% Connections
-    Dev -- "1. Opens PR" --> GH_PR
-    GH_PR -- "2. Sends Event" --> Webhook
-    
-    Webhook -- "3. Saves Data" --> DB
-    Webhook -- "4. Triggers" --> Pipeline
-    
-    Pipeline -- "5. Fetches Diffs" --> GH_PR
-    Pipeline -- "6. Sends Code" --> Gemini
-    Gemini -- "7. Returns Review" --> Pipeline
-    
-    Pipeline -- "8. Saves Results" --> DB
-    Pipeline -- "9. Posts Comments" --> GH_Comments
-    GH_Comments -- "10. Notifies" --> Dev
+    Dev -- 1. Opens PR --> GH
+    GH -- 2. Send Webhook --> Webhook
+    Webhook -- 3. Save Data --> DB
+    Webhook -- 4. Triggers --> Pipeline
+    Pipeline -- 5. Fetch Code --> GH
+    Pipeline -- 6. Send Context --> AI
+    AI -- 7. AI Review --> Pipeline
+    Pipeline -- 8. Save Results --> DB
+    Pipeline -- 9. Post Comments --> GH
 ```
 
 ## 🎥 Demo
