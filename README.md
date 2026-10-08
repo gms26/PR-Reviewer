@@ -17,51 +17,42 @@ An automated code review system that analyzes GitHub Pull Requests using Google 
 **What problem does this solve?**
 Code reviews take time and context. PR Reviewer automatically acts as a first-pass reviewer, instantly analyzing changed code, detecting bugs, and leaving actionable inline comments before a human ever has to look at it.
 
-```mermaid
-sequenceDiagram
-    autonumber
-    actor Dev as Developer
-    participant GH as GitHub
-    
-    box rgb(33,38,45) PR Reviewer System
-        participant Webhook as ⚡ WebhookReceiver
-        participant Async as 🔄 AsyncPipeline
-        participant DB as 🗄️ Database
-    end
-    
-    participant AI as 🧠 Gemini AI
+### 🏗️ Architecture of this Project
 
-    Note over Dev,GH: 1. Initiation
-    Dev->>GH: Opens/Updates Pull Request
-    GH->>Webhook: Sends PR Event (Webhook)
+Here is a simplified, high-level overview of how the PR Reviewer system works from start to finish:
+
+```mermaid
+flowchart TD
+    %% Styling
+    classDef dev fill:#f9f9f9,stroke:#333,stroke-width:2px;
+    classDef github fill:#24292e,stroke:#fff,stroke-width:2px,color:#fff;
+    classDef backend fill:#e3f2fd,stroke:#1e88e5,stroke-width:2px;
+    classDef ai fill:#fff3e0,stroke:#f57c00,stroke-width:2px;
+    classDef db fill:#f3e5f5,stroke:#8e24aa,stroke-width:2px;
+
+    %% Nodes
+    Dev(("👨‍💻 Developer")):::dev
+    GH_PR{"🐙 GitHub PR"}:::github
+    Webhook["⚡ Webhook Receiver\n(Fast & Sync)"]:::backend
+    Pipeline["🔄 Review Pipeline\n(Background Task)"]:::backend
+    DB[("🗄️ PostgreSQL\nDatabase")]:::db
+    Gemini["🧠 Gemini AI\n(Code Analysis)"]:::ai
+    GH_Comments{"💬 GitHub\nComments"}:::github
+
+    %% Connections
+    Dev -- "1. Opens PR" --> GH_PR
+    GH_PR -- "2. Sends Event" --> Webhook
     
-    Note over Webhook,DB: 2. Synchronous Ingestion
-    activate Webhook
-    Webhook->>Webhook: Validate HMAC Signature
-    Webhook->>DB: Persist Delivery & PR Metadata
-    Webhook-->>GH: HTTP 200 OK (Acknowledge)
-    Webhook-)Async: Trigger Review Pipeline
-    deactivate Webhook
+    Webhook -- "3. Saves Data" --> DB
+    Webhook -- "4. Triggers" --> Pipeline
     
-    Note over Async,AI: 3. Asynchronous Processing
-    activate Async
-    Async->>GH: Fetch PR Diffs (OAuth Token)
-    GH-->>Async: Changed Files & Diffs
+    Pipeline -- "5. Fetches Diffs" --> GH_PR
+    Pipeline -- "6. Sends Code" --> Gemini
+    Gemini -- "7. Returns Review" --> Pipeline
     
-    Async->>Async: Build Review Context
-    
-    Async->>AI: Send Prompt + Code Context
-    activate AI
-    AI-->>Async: Returns Review Findings (JSON)
-    deactivate AI
-    
-    Async->>Async: Validate & Map Comments
-    Async->>DB: Store Review Results
-    
-    Note over Async,GH: 4. Feedback Delivery
-    Async->>GH: Post Batch Inline Comments to PR
-    deactivate Async
-    GH-->>Dev: Notifies Developer
+    Pipeline -- "8. Saves Results" --> DB
+    Pipeline -- "9. Posts Comments" --> GH_Comments
+    GH_Comments -- "10. Notifies" --> Dev
 ```
 
 ## 🎥 Demo
