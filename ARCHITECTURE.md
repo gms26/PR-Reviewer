@@ -18,3 +18,98 @@ The PR Reviewer application is designed with a clean, decoupled architecture sep
 
 ## Domain vs Infrastructure
 The application strictly isolates the core domain (AI findings, code review context) from the infrastructure (GitHub API payloads, Gemini JSON responses). Mappers (like `ReviewCommentMapper`) act as translation layers to ensure this boundary is never breached.
+
+## Data Models (ER Diagram)
+
+The relational schema is designed around the GitHub ecosystem:
+
+```mermaid
+erDiagram
+    User ||--o{ Repository : "owns/monitors"
+    Repository ||--o{ PullRequest : "has"
+    PullRequest ||--o{ PullRequestEvent : "tracks events for"
+    PullRequest ||--o{ Review : "receives"
+    Review ||--o{ Comment : "contains"
+    
+    User {
+        Long id PK
+        String githubId
+        String username
+        String email
+        String avatarUrl
+    }
+    Repository {
+        Long id PK
+        String githubId
+        String fullName
+        Boolean active
+        Long user_id FK
+    }
+    PullRequest {
+        Long id PK
+        String githubId
+        Integer number
+        String state
+        String title
+        Long repository_id FK
+    }
+    PullRequestEvent {
+        Long id PK
+        String action
+        String commitSha
+        Long pull_request_id FK
+    }
+    Review {
+        Long id PK
+        String status
+        String completionLog
+        Long pull_request_id FK
+    }
+    Comment {
+        Long id PK
+        String path
+        Integer line
+        String body
+        Long review_id FK
+    }
+    WebhookDelivery {
+        Long id PK
+        String deliveryId
+        String eventType
+        String action
+    }
+```
+
+## Core Component Interactions
+
+```mermaid
+classDiagram
+    class WebhookReceiverService {
+        +receive(payload, signature, eventType, deliveryId)
+    }
+    class PullRequestService {
+        +processPullRequestEvent(payload)
+    }
+    class AsyncReviewCoordinatorService {
+        +coordinateReview(pullRequestId, commitSha)
+    }
+    class GitHubPullRequestService {
+        +fetchDiff(repo, prNumber)
+    }
+    class ContextBuilder {
+        +buildReviewContext(diffs)
+    }
+    class AIReviewService {
+        +generateReview(context)
+    }
+    class GitHubReviewCommentService {
+        +postReviewComments(repo, prNumber, comments)
+    }
+    
+    WebhookReceiverService --> PullRequestService : Initiates
+    PullRequestService --> AsyncReviewCoordinatorService : Triggers (Async)
+    AsyncReviewCoordinatorService --> GitHubPullRequestService : Uses
+    AsyncReviewCoordinatorService --> ContextBuilder : Uses
+    AsyncReviewCoordinatorService --> AIReviewService : Uses
+    AsyncReviewCoordinatorService --> GitHubReviewCommentService : Uses
+```
